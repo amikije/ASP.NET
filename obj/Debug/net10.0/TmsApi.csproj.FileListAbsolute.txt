@@ -34,3 +34,5 @@ C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\refint\TmsApi.dll
 C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.pdb
 C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.genruntimeconfig.cache
 C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\ref\TmsApi.dll
+C:\Users\Amir_JS\TmsApi\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\Amir_JS\TmsApi\bin\Debug\net10.0\Scalar.AspNetCore.dll

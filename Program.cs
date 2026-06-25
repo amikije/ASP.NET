@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using EnrollmentLab.Services;
 using EnrollmentLab.Options;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,25 +17,13 @@ builder.Services.AddAuthorization();
 // Controllers
 builder.Services.AddControllers();
 
-// ProblemDetails (Exercise 6)
+// ProblemDetails
 builder.Services.AddProblemDetails();
 
-// Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// OpenAPI (required for Scalar)
+builder.Services.AddOpenApi();
 
-// =====================================
 // Dependency Injection
-// =====================================
-
-// IMPORTANT:
-// Singleton keeps one EnrollmentService
-// instance alive for the whole application.
-//
-// This allows the in-memory Dictionary
-// to keep enrollment records between
-// POST, GET and DELETE requests.
-
 builder.Services.AddSingleton<
     IEnrollmentService,
     EnrollmentService>();
@@ -57,13 +46,25 @@ builder.Services
 
 var app = builder.Build();
 
-// Exception Handling
-app.UseExceptionHandler();
-app.UseStatusCodePages();
 
-// Swagger
-app.UseSwagger();
-app.UseSwaggerUI();
+// Exercise 7: Environment Toggle
+
+
+if (app.Environment.IsDevelopment())
+{
+    // OpenAPI document
+    app.MapOpenApi();
+
+    // Scalar API Explorer
+    app.MapScalarApiReference();
+}
+else
+{
+    // Production error handling
+    app.UseExceptionHandler();
+}
+
+app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 
