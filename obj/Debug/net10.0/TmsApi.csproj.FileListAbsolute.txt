@@ -27,3 +27,10 @@ C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.pdb
 C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.genruntimeconfig.cache
 C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\ref\TmsApi.dll
 C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.sourcelink.json
+C:\Users\Amir_JS\TmsApi\bin\Debug\net10.0\Microsoft.OpenApi.dll
+C:\Users\Amir_JS\TmsApi\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Amir_JS\TmsApi\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Amir_JS\TmsApi\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.csproj.AssemblyReference.cache
+C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Amir_JS\TmsApi\obj\Debug\net10.0\TmsApi.csproj.Up2Date

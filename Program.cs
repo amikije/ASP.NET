@@ -2,32 +2,60 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using EnrollmentLab.Services;
 using EnrollmentLab.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// =====================================
 // Authentication
+// =====================================
+
 builder.Services.AddAuthentication("Training")
     .AddScheme<AuthenticationSchemeOptions, TrainingAuthHandler>(
-        "Training", options => { });
+        "Training",
+        options => { });
 
 builder.Services.AddAuthorization();
 
+// =====================================
+// Controllers
+// =====================================
+
 builder.Services.AddControllers();
 
-// Exercise 2 registrations
+// =====================================
+// Swagger (Exercise 5)
+// =====================================
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// =====================================
+// Dependency Injection
+// =====================================
+
 builder.Services.AddScoped<
     IEnrollmentService,
     EnrollmentService>();
 
 builder.Services.AddSingleton<EnrollmentWorker>();
 
-// Enable validation
+// =====================================
+// Validate Dependency Injection
+// =====================================
+
 builder.Host.UseDefaultServiceProvider(options =>
 {
     options.ValidateScopes = true;
     options.ValidateOnBuild = true;
 });
-//  fetch from appsettings.json
- builder.Services
+
+// =====================================
+// Options Pattern
+// Reads Assessment section from
+// appsettings.json
+// =====================================
+
+builder.Services
     .AddOptions<AssessmentOptions>()
     .Bind(builder.Configuration.GetSection("Assessment"))
     .ValidateDataAnnotations()
@@ -35,12 +63,28 @@ builder.Host.UseDefaultServiceProvider(options =>
 
 var app = builder.Build();
 
+// =====================================
+// Swagger Middleware
+// =====================================
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// =====================================
+// Middleware Pipeline
+// =====================================
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+// =====================================
+// Protected Endpoint
+// =====================================
 
 app.MapGet("/api/assessments/results", () =>
 {
@@ -52,6 +96,10 @@ app.MapGet("/api/assessments/results", () =>
     });
 })
 .RequireAuthorization();
+
+// =====================================
+// Controller Routes
+// =====================================
 
 app.MapControllers();
 
