@@ -5,10 +5,7 @@ using EnrollmentLab.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// =====================================
 // Authentication
-// =====================================
-
 builder.Services.AddAuthentication("Training")
     .AddScheme<AuthenticationSchemeOptions, TrainingAuthHandler>(
         "Training",
@@ -16,16 +13,13 @@ builder.Services.AddAuthentication("Training")
 
 builder.Services.AddAuthorization();
 
-// =====================================
 // Controllers
-// =====================================
-
 builder.Services.AddControllers();
 
-// =====================================
-// Swagger (Exercise 5)
-// =====================================
+// ProblemDetails (Exercise 6)
+builder.Services.AddProblemDetails();
 
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -33,28 +27,28 @@ builder.Services.AddSwaggerGen();
 // Dependency Injection
 // =====================================
 
-builder.Services.AddScoped<
+// IMPORTANT:
+// Singleton keeps one EnrollmentService
+// instance alive for the whole application.
+//
+// This allows the in-memory Dictionary
+// to keep enrollment records between
+// POST, GET and DELETE requests.
+
+builder.Services.AddSingleton<
     IEnrollmentService,
     EnrollmentService>();
 
 builder.Services.AddSingleton<EnrollmentWorker>();
 
-// =====================================
-// Validate Dependency Injection
-// =====================================
-
+// Validate DI
 builder.Host.UseDefaultServiceProvider(options =>
 {
     options.ValidateScopes = true;
     options.ValidateOnBuild = true;
 });
 
-// =====================================
 // Options Pattern
-// Reads Assessment section from
-// appsettings.json
-// =====================================
-
 builder.Services
     .AddOptions<AssessmentOptions>()
     .Bind(builder.Configuration.GetSection("Assessment"))
@@ -63,16 +57,13 @@ builder.Services
 
 var app = builder.Build();
 
-// =====================================
-// Swagger Middleware
-// =====================================
+// Exception Handling
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
+// Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
-
-// =====================================
-// Middleware Pipeline
-// =====================================
 
 app.UseHttpsRedirection();
 
@@ -82,10 +73,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-// =====================================
 // Protected Endpoint
-// =====================================
-
 app.MapGet("/api/assessments/results", () =>
 {
     return Results.Ok(new
@@ -97,9 +85,12 @@ app.MapGet("/api/assessments/results", () =>
 })
 .RequireAuthorization();
 
-// =====================================
-// Controller Routes
-// =====================================
+// Test Error Endpoint
+app.MapGet("/api/error", () =>
+{
+    throw new TmsDatabaseException(
+        "Simulated database failure for ProblemDetails testing");
+});
 
 app.MapControllers();
 

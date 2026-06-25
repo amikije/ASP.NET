@@ -15,6 +15,15 @@ public class EnrollmentsController : ControllerBase
     {
         _service = service;
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<EnrollmentRecord>>>
+    GetAll()
+    {
+        var records = await _service.GetAllAsync();
+
+        return Ok(records);
+    }
     // GET api/enrollments/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<EnrollmentRecord>>
