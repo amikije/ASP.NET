@@ -95,4 +95,54 @@ public class TestController : ControllerBase
             });
         }
     }
+
+    [HttpGet("active-students")]
+    public IActionResult ActiveStudents()
+    {
+        var count = _context.Students
+            .Where(s => s.IsActive && s.GPA >= 3.0m)
+            .Count();
+
+        return Ok(new
+        {
+            ActiveStudents = count
+        });
+    }
+    [HttpGet("course-enrollments")]
+    public IActionResult CourseEnrollments()
+    {
+        var courses = _context.Courses
+            .Select(c => new
+            {
+                c.Title,
+                EnrollmentCount = c.Enrollments.Count
+            })
+            .OrderByDescending(c => c.EnrollmentCount)
+            .ToList();
+
+        return Ok(courses);
+    }
+    [HttpGet("average-gpa")]
+    public IActionResult AverageGpa()
+    {
+        var result = _context.Enrollments
+            .GroupBy(e => e.Course.Title)
+            .Select(g => new
+            {
+                Course = g.Key,
+                AverageGPA = g.Average(e => e.Student.GPA)
+            })
+            .ToList();
+
+        return Ok(result);
+    }
+    [HttpGet("students-without-enrollments")]
+    public IActionResult StudentsWithoutEnrollments()
+    {
+        var students = _context.Students
+            .Where(s => !s.Enrollments.Any())
+            .ToList();
+
+        return Ok(students);
+    }
 }

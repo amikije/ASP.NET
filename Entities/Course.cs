@@ -9,4 +9,5 @@ public class Course
     public int Credits { get; set; }
 
     public bool IsActive { get; set; }
+    public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 }
