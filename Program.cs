@@ -3,9 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using EnrollmentLab.Services;
 using EnrollmentLab.Options;
 using Scalar.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using TmsApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddDbContext<TmsDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("TmsDatabase"))
+    .LogTo(Console.WriteLine, LogLevel.Information)
+    .EnableSensitiveDataLogging());
 // Authentication
 builder.Services.AddAuthentication("Training")
     .AddScheme<AuthenticationSchemeOptions, TrainingAuthHandler>(
@@ -45,7 +51,14 @@ builder.Services
     .ValidateOnStart();
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<TmsDbContext>();
 
+    context.Database.Migrate();
+
+    DatabaseSeeder.Seed(context);
+}
 
 // Exercise 7: Environment Toggle
 
