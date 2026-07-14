@@ -1,8 +1,7 @@
+namespace TmsApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TmsApi.Data;
-
-namespace TmsApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -15,165 +14,69 @@ public class TestController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("deferred")]
-    public IActionResult Deferred()
+    // All your other endpoints...
+
+    [HttpGet("nplusone")]
+    public async Task<IActionResult> NPlusOne(
+        CancellationToken cancellationToken = default)
     {
-        var query = _context.Students.Where(s => s.GPA >= 3.0m);
+        var students = await _context.Students
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
 
-        var orderedQuery = query.OrderBy(s => s.Name);
-
-        var results = orderedQuery.ToList();
-
-        return Ok(results);
-    }
-    [HttpGet("stats")]
-    public IActionResult GetStats()
-    {
-        var totalStudents = _context.Students.Count();
-        var activeStudents = _context.Students.Count(s => s.IsActive);
-        var avgGpa = _context.Students.Average(s => s.GPA);
-
-        return Ok(new
+        foreach (var s in students)
         {
-            TotalStudents = totalStudents,
-            ActiveStudents = activeStudents,
-            AverageGPA = avgGpa
-        });
-    }
+            var count = await _context.Enrollments
+                .AsNoTracking()
+                .CountAsync(e => e.StudentId == s.Id, cancellationToken);
 
-    [HttpGet("students-with-courses")]
-    public IActionResult GetStudentsWithCourses()
-    {
-        var data = _context.Enrollments
-            .Include(e => e.Student)
-            .Include(e => e.Course)
-            .ToList();
-
-        return Ok(data);
-    }
-    [HttpGet("course-count")]
-    public IActionResult CourseStudentCount()
-    {
-        var result = _context.Enrollments
-            .GroupBy(e => e.Course.Title)
-            .Select(g => new
-            {
-                Course = g.Key,
-                Students = g.Count()
-            })
-            .ToList();
-
-        return Ok(result);
-    }
-    // Helper method (EF Core cannot translate this into SQL)
-    private static bool IsHonorRoll(decimal gpa)
-    {
-        return gpa >= 3.5m;
-    }
-
-    [HttpGet("translation-fail")]
-    public IActionResult TranslationFail()
-    {
-        Console.WriteLine("Running non-translatable query...");
-
-        try
-        {
-            var students = _context.Students
-      .AsEnumerable()
-      .Where(s => IsHonorRoll(s.GPA))
-      .ToList();
-
-            return Ok(students);
+            Console.WriteLine($"{s.Name}: {count} enrollments");
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
 
-            return BadRequest(new
-            {
-                Error = ex.Message
-            });
-        }
+        return Ok("Check the SQL log in the console.");
     }
 
-    [HttpGet("active-students")]
-    public IActionResult ActiveStudents()
+    [HttpGet("nplusone-fixed")]
+    public async Task<IActionResult> NPlusOneFixed(
+        CancellationToken cancellationToken = default)
     {
-        var count = _context.Students
-            .Where(s => s.IsActive && s.GPA >= 3.0m)
-            .Count();
-
-        return Ok(new
-        {
-            ActiveStudents = count
-        });
-    }
-    [HttpGet("course-enrollments")]
-    public IActionResult CourseEnrollments()
-    {
-        var courses = _context.Courses
-            .Select(c => new
+        var report = await _context.Students
+            .AsNoTracking()
+            .Select(s => new
             {
-                c.Title,
-                EnrollmentCount = c.Enrollments.Count
+                s.Name,
+                EnrollmentCount = s.Enrollments.Count()
             })
-            .OrderByDescending(c => c.EnrollmentCount)
-            .ToList();
+            .ToListAsync(cancellationToken);
 
-        return Ok(courses);
+        return Ok(report);
     }
-    [HttpGet("average-gpa")]
-    public IActionResult AverageGpa()
-    {
-        var result = _context.Enrollments
-            .GroupBy(e => e.Course.Title)
-            .Select(g => new
-            {
-                Course = g.Key,
-                AverageGPA = g.Average(e => e.Student.GPA)
-            })
-            .ToList();
-
-        return Ok(result);
-    }
-    [HttpGet("students-without-enrollments")]
-    public IActionResult StudentsWithoutEnrollments()
-    {
-        var students = _context.Students
-            .Where(s => !s.Enrollments.Any())
-            .ToList();
-
-        return Ok(students);
-    }
-    [HttpGet("students")]
-public async Task<IActionResult> GetStudents(
-    int page = 1,
-    CancellationToken cancellationToken = default)
+    [HttpDelete("student/{id}")]
+public async Task<IActionResult> SoftDeleteStudent(int id)
 {
-    const int pageSize = 20;
+    var student = await _context.Students.FindAsync(id);
 
-    var students = await _context.Students
-        .OrderBy(s => s.Name)
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .ToListAsync(cancellationToken);
+    if (student == null)
+        return NotFound();
 
-    return Ok(students);
+    student.IsDeleted = true;
+
+    await _context.SaveChangesAsync();
+
+    return NoContent();
 }
-[HttpGet("top-courses")]
-public async Task<IActionResult> GetTopCourses(
-    CancellationToken cancellationToken = default)
+[HttpPut("deactivate-low-gpa")]
+public async Task<IActionResult> DeactivateLowGpaStudents()
 {
-    var result = await _context.Courses
-        .Select(c => new
-        {
-            Course = c.Title,
-            EnrollmentCount = c.Enrollments.Count()
-        })
-        .OrderByDescending(c => c.EnrollmentCount)
-        .Take(5)
-        .ToListAsync(cancellationToken);
+    var rowsAffected = await _context.Students
+        .Where(s => s.GPA < 2.0m)
+        .ExecuteUpdateAsync(setters => setters
+            .SetProperty(s => s.IsActive, false));
 
-    return Ok(result);
+    return Ok(new
+    {
+        Message = "Students updated successfully.",
+        RowsAffected = rowsAffected
+    });
 }
 }

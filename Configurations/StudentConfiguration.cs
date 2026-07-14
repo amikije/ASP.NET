@@ -1,0 +1,42 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ASP.NET_session_3.Entities;
+
+namespace TmsApi.Configurations;
+
+public class StudentConfiguration : IEntityTypeConfiguration<Student>
+{
+    public void Configure(EntityTypeBuilder<Student> builder)
+    {
+        // Primary Key
+        builder.HasKey(s => s.Id);
+
+        // Name
+        builder.Property(s => s.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        // GPA
+        builder.Property(s => s.GPA)
+            .HasPrecision(3, 2);
+
+        // IsActive
+        builder.Property(s => s.IsActive)
+            .HasDefaultValue(true);
+
+        // Shadow Property
+        builder.Property<DateTime>("LastUpdated");
+
+        // Concurrency Token
+        builder.Property(s => s.Version)
+            .IsRowVersion();
+builder.Property(s => s.IsDeleted)
+    .HasDefaultValue(false);
+    builder.HasQueryFilter(s => !s.IsDeleted);
+        // Relationship
+        builder.HasMany(s => s.Enrollments)
+            .WithOne(e => e.Student)
+            .HasForeignKey(e => e.StudentId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+}
