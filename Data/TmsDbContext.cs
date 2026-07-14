@@ -15,4 +15,12 @@ public class TmsDbContext : DbContext
     public DbSet<Course> Courses => Set<Course>();
 
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
+
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(TmsDbContext).Assembly);
+
+        base.OnModelCreating(modelBuilder);
+    }
 }

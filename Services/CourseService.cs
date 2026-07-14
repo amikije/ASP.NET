@@ -1,0 +1,32 @@
+using Microsoft.EntityFrameworkCore;
+using TmsApi.Data;
+using ASP.NET_session_3.Entities;
+using TmsApi.Controllers;
+
+namespace TmsApi.Services;
+
+public class CourseService(
+    TmsDbContext context,
+    ILogger<CourseService> logger) : ICourseService
+{
+    public async Task<Course?> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await context.Courses
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id, ct);
+    }
+
+    public async Task<Course> CreateAsync(Course course, CancellationToken ct)
+    {
+        context.Courses.Add(course);
+
+        await context.SaveChangesAsync(ct);
+
+        logger.LogInformation(
+            "Created course {CourseId} ({Code})",
+            course.Id,
+            course.Code);
+
+        return course;
+    }
+}
