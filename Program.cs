@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using TmsApi.Data;
 using TmsApi.Controllers;
 using TmsApi.Services;
+using Tms.Api.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,10 @@ builder.Services
     .Bind(builder.Configuration.GetSection("Assessment"))
     .ValidateDataAnnotations()
     .ValidateOnStart();
+builder.Services.AddControllers(options =>
+{
+options.Filters.Add<AuditLogFilter>();
+});
 builder.Services.AddScoped<ICourseService, CourseService>();
 var app = builder.Build();
 

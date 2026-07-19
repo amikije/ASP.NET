@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Tms.Api.Dtos;
 using TmsApi.Dtos.Course;
 using TmsApi.Services;
 
@@ -43,5 +44,13 @@ public class CoursesController(ICourseService courseService)
             nameof(GetCourseById),
             new { id = created.Id },
             created);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCourses(
+[FromQuery] PagedRequest request, CancellationToken ct)
+    {
+        var result = await courseService.GetCoursesAsync(request, ct);
+        return Ok(result);
     }
 }
