@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ASP.NET_session_3.Entities;
+namespace ASP.NET_session_3.Entities;
 
 public class Student
 {
@@ -12,7 +10,6 @@ public class Student
 
     public bool IsActive { get; set; }
 
-    public uint Version { get; set; }
     public bool IsDeleted { get; set; }
 
     public ICollection<Enrollment> Enrollments { get; set; }

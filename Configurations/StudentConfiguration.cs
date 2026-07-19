@@ -27,9 +27,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         // Shadow Property
         builder.Property<DateTime>("LastUpdated");
 
-        // Concurrency Token
-        builder.Property(s => s.Version)
-            .IsRowVersion();
+       
 builder.Property(s => s.IsDeleted)
     .HasDefaultValue(false);
     builder.HasQueryFilter(s => !s.IsDeleted);

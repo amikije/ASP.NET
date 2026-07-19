@@ -1,11 +1,18 @@
-namespace TmsApi.Controllers;
+using TmsApi.Dtos.Course;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TmsApi.Data;
-using ASP.NET_session_3.Entities;
+namespace TmsApi.Services;
+
 public interface ICourseService
 {
-    Task<Course?> GetByIdAsync(int id, CancellationToken ct);
-    Task<Course> CreateAsync(Course course, CancellationToken ct);
+    Task<CourseResponseDto?> GetByIdAsync(
+        int id,
+        CancellationToken ct);
+
+    Task<CourseResponseDto> CreateAsync(
+        CreateCourseRequest request,
+        CancellationToken ct);
+
+    Task<bool> CodeExistsAsync(
+        string code,
+        CancellationToken ct);
 }

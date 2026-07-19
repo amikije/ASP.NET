@@ -1,32 +1,63 @@
 using Microsoft.EntityFrameworkCore;
-using TmsApi.Data;
 using ASP.NET_session_3.Entities;
-using TmsApi.Controllers;
+using TmsApi.Data;
+using TmsApi.Dtos.Course;
 
 namespace TmsApi.Services;
 
 public class CourseService(
     TmsDbContext context,
-    ILogger<CourseService> logger) : ICourseService
+    ILogger<CourseService> logger)
+    : ICourseService
 {
-    public async Task<Course?> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<CourseResponseDto?> GetByIdAsync(
+        int id,
+        CancellationToken ct)
     {
         return await context.Courses
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == id, ct);
+            .Where(c => c.Id == id)
+            .Select(c => new CourseResponseDto(
+                c.Id,
+                c.Code,
+                c.Title,
+                c.MaxCapacity,
+                c.Enrollments.Count))
+            .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<Course> CreateAsync(Course course, CancellationToken ct)
+    public async Task<bool> CodeExistsAsync(
+        string code,
+        CancellationToken ct)
     {
+        return await context.Courses
+            .AnyAsync(c => c.Code == code, ct);
+    }
+
+    public async Task<CourseResponseDto> CreateAsync(
+        CreateCourseRequest request,
+        CancellationToken ct)
+    {
+        var course = new Course
+        {
+            Code = request.Code,
+            Title = request.Title,
+            MaxCapacity = request.MaxCapacity
+        };
+
         context.Courses.Add(course);
 
         await context.SaveChangesAsync(ct);
 
         logger.LogInformation(
-            "Created course {CourseId} ({Code})",
-            course.Id,
+            "Course {Code} created.",
             course.Code);
 
-        return course;
+        return new CourseResponseDto(
+            course.Id,
+            course.Code,
+            course.Title,
+            course.MaxCapacity,
+            0);
     }
 }
