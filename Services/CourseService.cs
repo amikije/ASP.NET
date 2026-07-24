@@ -21,11 +21,21 @@ public class CourseService(
         throw new NotImplementedException();
     }
 
-    public Task<CourseResponseDto?> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<CourseResponseDto?> GetByIdAsync(
+       int id,
+       CancellationToken ct)
     {
-        throw new NotImplementedException();
+        return await context.Courses
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .Select(c => new CourseResponseDto(
+                c.Id,
+                c.Code,
+                c.Title,
+                c.MaxCapacity,
+                c.Enrollments.Count))
+            .FirstOrDefaultAsync(ct);
     }
-
     // your other methods...
 
     public async Task<PagedResponse<CourseResponseDto>> GetCoursesAsync(

@@ -7,50 +7,67 @@ namespace TmsApi.Controllers;
 
 [ApiController]
 [Route("api/courses")]
-public class CoursesController(ICourseService courseService)
+[Tags("Courses")]
+[Produces("application/json")]
+public class CoursesController(
+    ICourseService courseService,
+    LinkGenerator linkGenerator)
     : ControllerBase
 {
     [HttpGet("{id:int}", Name = nameof(GetCourseById))]
+    [EndpointSummary("Get a course by ID")]
+    [EndpointDescription("Returns a course together with HATEOAS links.")]
+    [ProducesResponseType(typeof(CourseDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCourseById(
         int id,
         CancellationToken ct)
     {
-        var course =
-            await courseService.GetByIdAsync(id, ct);
+        var course = await courseService.GetByIdAsync(id, ct);
 
         if (course is null)
             return NotFound();
 
-        return Ok(course);
-    }
+        // Build links
+        var coursePath = linkGenerator.GetPathByName(
+            HttpContext,
+            nameof(GetCourseById),
+            new { id });
 
-    [HttpPost]
-    public async Task<IActionResult> CreateCourse(
-        CreateCourseRequest request,
-        CancellationToken ct)
-    {
-        if (await courseService.CodeExistsAsync(request.Code, ct))
+        var enrollmentsPath = linkGenerator.GetPathByAction(
+            HttpContext,
+            action: "GetEnrollments",
+            controller: "Enrollments",
+            values: new { courseId = id });
+
+        // HATEOAS links
+        var links = new List<LinkDto>
         {
-            return Conflict(new
-            {
-                message = $"Course code '{request.Code}' already exists."
-            });
+            new LinkDto(coursePath!, "self", "GET"),
+            new LinkDto(coursePath!, "update", "PUT"),
+            new LinkDto(coursePath!, "delete", "DELETE"),
+            new LinkDto(enrollmentsPath!, "enrollments", "GET")
+        };
+
+        // Only show the enroll link if the course has space
+        if (course.EnrollmentCount < course.MaxCapacity)
+        {
+            links.Add(
+                new LinkDto(
+                    enrollmentsPath!,
+                    "enroll",
+                    "POST"));
         }
 
-        var created =
-            await courseService.CreateAsync(request, ct);
+        // Build the response
+        var detailDto = new CourseDetailDto(
+            course.Id,
+            course.Code,
+            course.Title,
+            course.MaxCapacity,
+            course.EnrollmentCount,
+            links);
 
-        return CreatedAtAction(
-            nameof(GetCourseById),
-            new { id = created.Id },
-            created);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetCourses(
-[FromQuery] PagedRequest request, CancellationToken ct)
-    {
-        var result = await courseService.GetCoursesAsync(request, ct);
-        return Ok(result);
+        return Ok(detailDto);
     }
 }
