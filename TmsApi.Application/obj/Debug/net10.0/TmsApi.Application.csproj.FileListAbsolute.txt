@@ -1,0 +1,15 @@
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\bin\Debug\net10.0\TmsApi.Application.deps.json
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\bin\Debug\net10.0\TmsApi.Application.dll
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\bin\Debug\net10.0\TmsApi.Application.pdb
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\bin\Debug\net10.0\TmsApi.Domain.dll
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\bin\Debug\net10.0\TmsApi.Domain.pdb
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.Application.csproj.AssemblyReference.cache
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.Application.AssemblyInfoInputs.cache
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.Application.AssemblyInfo.cs
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.Application.csproj.CoreCompileInputs.cache
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.A.8F6B91CF.Up2Date
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.Application.dll
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\refint\TmsApi.Application.dll
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\TmsApi.Application.pdb
+C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Application\obj\Debug\net10.0\ref\TmsApi.Application.dll
