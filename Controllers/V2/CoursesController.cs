@@ -1,12 +1,9 @@
 using Asp.Versioning;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TmsApi.Application.Dtos.Course;
-using TmsApi.Application.DTOs;
 using TmsApi.Application.Interfaces;
 using TmsApi.Infrastructure.Services;
 
-namespace TmsApi.Api.Controllers;
+namespace TmsApi.Api.Controllers.V2;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/courses")]
@@ -14,12 +11,10 @@ namespace TmsApi.Api.Controllers;
 public class CoursesController : ControllerBase
 {
     private readonly ICachedCourseService _cachedCourseService;
-    private readonly IMediator _mediator;
 
-    public CoursesController(ICachedCourseService cachedCourseService, IMediator mediator)
+    public CoursesController(ICachedCourseService cachedCourseService)
     {
         _cachedCourseService = cachedCourseService;
-        _mediator = mediator;
     }
 
     [HttpGet]
@@ -76,6 +71,8 @@ public class CoursesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCourse(int id, CancellationToken ct)
     {
+        // Note: For detail view, you might want to cache individual courses too
+        // For now, we'll get all and filter (or you can add GetCourseById to the cache service)
         var allCourses = await _cachedCourseService.GetAllCoursesAsync(ct);
         var course = allCourses.FirstOrDefault(c => c.Id == id);
 
@@ -84,7 +81,14 @@ public class CoursesController : ControllerBase
 
         return Ok(new
         {
-            data = course,
+            data = new
+            {
+                course.Id,
+                course.Code,
+                course.Title,
+                course.MaxCapacity,
+                EnrollmentCount = course.EnrollmentCount
+            },
             links = new
             {
                 self = $"/api/v2/courses/{id}",
