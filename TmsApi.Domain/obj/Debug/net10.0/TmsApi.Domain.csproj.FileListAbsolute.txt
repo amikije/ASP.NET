@@ -10,3 +10,15 @@ C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi
 C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Domain\obj\Debug\net10.0\refint\TmsApi.Domain.dll
 C:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.pdb
 c:\Users\Amir_JS\Downloads\Compressed\ASP.NET-Final-DB_2\ASP.NET-Final-DB\TmsApi.Domain\obj\Debug\net10.0\ref\TmsApi.Domain.dll
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\bin\Debug\net10.0\TmsApi.Domain.deps.json
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\bin\Debug\net10.0\TmsApi.Domain.dll
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\bin\Debug\net10.0\TmsApi.Domain.pdb
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.AssemblyInfoInputs.cache
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.AssemblyInfo.cs
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.sourcelink.json
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.dll
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\refint\TmsApi.Domain.dll
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\TmsApi.Domain.pdb
+C:\Users\Amir_JS\Desktop\M7-4\TmsApi.Domain\obj\Debug\net10.0\ref\TmsApi.Domain.dll
