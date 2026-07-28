@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TmsApi.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3455880bb6f10fe9cd124c8b235faa2eb5fa0205")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c7aa88f078acf6f3c52bd998c3a11164a839eb79")]
 [assembly: System.Reflection.AssemblyProductAttribute("TmsApi.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TmsApi.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
